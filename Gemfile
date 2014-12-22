@@ -13,4 +13,7 @@ gem 'spring',        group: :development
 gem 'pg'
 gem 'debugger', group: [:development, :test]
 gem 'authlogic'
+gem 'geokit'
+#gem 'geocoder'
+
 

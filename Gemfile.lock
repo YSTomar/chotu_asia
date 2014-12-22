@@ -54,6 +54,8 @@ GEM
     ffi-compiler (0.1.3)
       ffi (>= 1.0.0)
       rake
+    geokit (1.9.0)
+      multi_json (>= 1.3.2)
     hike (1.2.3)
     i18n (0.7.0)
     jbuilder (2.2.6)
@@ -142,6 +144,7 @@ DEPENDENCIES
   authlogic
   coffee-rails (~> 4.0.0)
   debugger
+  geokit
   jbuilder (~> 2.0)
   jquery-rails
   mysql2
