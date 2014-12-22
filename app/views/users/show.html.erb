@@ -34,41 +34,38 @@
 <b>Current login ip:</b>
 <%=h @user.current_login_ip %>
 </p>
-
 <script>
-	var x = document.getElementById("location");
-	geocoder = new google.maps.Geocoder();
- 	if (navigator.geolocation) {
-    	navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
-	} 
-	//Get the latitude and the longitude;
-	function successFunction(position) {
-    	var lat = position.coords.latitude;
-    	var lng = position.coords.longitude;
-    	codeLatLng(lat, lng)
-	}
+$( document ).ready(function() {
 
-	function errorFunction(){
-    	alert("Geocoder failed");
-	}
+  $.ajax({
+  url: 'geocoding_search',
+  dataType: 'json',
+  success: function( data ) {
+    var x = document.getElementById("location");
+  geocoder = new google.maps.Geocoder();
+    codeLatLng(data.lat, data.lon)
+    function codeLatLng(lat, lng) {
 
-  	function codeLatLng(lat, lng) {
+      var latlng = new google.maps.LatLng(lat, lng);
+      geocoder.geocode({'latLng': latlng}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+        console.log(results)
+          if (results[1]) {
+          //formatted address
+          alert(results[0].formatted_address)
+          //find country name
+           x.innerHTML = results[0].formatted_address
+          } else {
+            alert("No results found");
+          }
+          } else {
+            alert("Geocoder failed due to: " + status);
+          }
+      });
+    }
+  },
 
-    	var latlng = new google.maps.LatLng(lat, lng);
-    	geocoder.geocode({'latLng': latlng}, function(results, status) {
-      	if (status == google.maps.GeocoderStatus.OK) {
-      	console.log(results)
-        	if (results[1]) {
-         	//formatted address
-         	alert(results[0].formatted_address)
-        	//find country name
-        	 x.innerHTML = results[0].formatted_address
-        	} else {
-          	alert("No results found");
-        	}
-      		} else {
-        		alert("Geocoder failed due to: " + status);
-      		}
-    	});
-  	}
+  });
+  
+    });
 </script>

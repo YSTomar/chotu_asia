@@ -10,4 +10,6 @@ Rails.application.routes.draw do
 
   root :to => 'users#show'
 
+  get 'geocoding_search' => 'users#geocoding_search'
+
 end
