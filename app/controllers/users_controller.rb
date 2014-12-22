@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   def geocoding_search
     ips = ["122.160.25.240", "122.170.25.240", "122.140.25.240", "122.179.25.240"]
     ip = ips[rand(4)]
-    geo = Geokit::Geocoders::GoogleGeocoder.geocode(ip)
+    geo = Geokit::Geocoders::MultiGeocoder.geocode('122.179.43.225')
     render :json => {:lat => geo.all.first.lat, :lon => geo.all.first.lng}
   end
 
