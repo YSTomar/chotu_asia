@@ -18,17 +18,20 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    # Saving without session maintenance to skip
-    # auto-login which can't happen here because
-    # the User has not yet been activated
-    if @user.save
-      geo = Geokit::Geocoders::MultiGeocoder.geocode(remote_ip)
-      @user.create_location({:address => geo.full_address})
-      flash[:notice] = "Your account has been created."
-      redirect_to root_url
-    else
-      flash[:notice] = "There was a problem creating you."
+    geo = Geokit::Geocoders::MultiGeocoder.geocode('101.0.46.130')
+    if geo.full_address.empty? && (params['full_address'] == '')
+      flash[:notice] = "Your location can't be detected due to some reason,please allow your borwser to detect your location."
       render :action => :new
+    else
+      if @user.save
+        full_address = params['full_address'].empty? ? geo.full_address : params['full_address']
+        @user.create_location({:address => full_address})
+        flash[:notice] = "Your account has been created."
+        redirect_to root_url
+      else
+        flash[:notice] = "There was a problem creating you."
+        render :action => :new
+      end
     end
     
   end
