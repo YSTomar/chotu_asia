@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   
   before_filter :require_user, :only => [:show, :edit, :update]
+  
 
   def show
     @user = current_user
@@ -21,6 +22,8 @@ class UsersController < ApplicationController
     # auto-login which can't happen here because
     # the User has not yet been activated
     if @user.save
+      geo = Geokit::Geocoders::MultiGeocoder.geocode(remote_ip)
+      @user.create_location({:address => geo.full_address})
       flash[:notice] = "Your account has been created."
       redirect_to root_url
     else
@@ -28,6 +31,11 @@ class UsersController < ApplicationController
       render :action => :new
     end
     
+  end
+
+  def geocoding_search
+    location = Location.find(params['location_id'])
+    location.update_attribute('address',  params['address'])
   end
 
   def update
@@ -46,4 +54,5 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:email, :password, :name, :password_confirmation)
     end
+
 end

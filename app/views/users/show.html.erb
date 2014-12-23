@@ -36,7 +36,7 @@
 <%= javascript_include_tag 'http://maps.googleapis.com/maps/api/js?sensor=false' %>
 
 <div id='location'>
-   <%= @geo.full_address %>
+   <%= @user.location.address %>
 </div>
 <a id='precise_location' href='javascript:;' onclick='return check_location()'>Use precise location </a>
 
@@ -68,10 +68,19 @@
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[1]) {
           $('#location').html(results[0].formatted_address)
+           $.ajax({
+
+            url: 'geocoding_search',
+            data:{'location_id' : <%= current_user.location.id%>, 'address' : results[0].formatted_address },
+            dataType: 'json',
+            success: function( data ) {
+              alert('your location is successfully changed');}
+          });
         } else {
           alert("No results found");
         }
       } else {
+        console.log(status)
         alert("Geocoder failed due to: " + status);
       }
     });
