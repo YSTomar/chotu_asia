@@ -7,6 +7,14 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user_session, :current_user
 
+  def remote_ip
+    if request.remote_ip == '127.0.0.1'
+      '122.179.43.225'
+    else
+      request.remote_ip
+    end
+  end
+
   private
 	def current_user_session
 	  return @current_user_session if defined?(@current_user_session)

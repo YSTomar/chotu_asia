@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   def show
     @user = current_user
-    @geo = Geokit::Geocoders::MultiGeocoder.geocode('122.179.43.225')
+    @geo = Geokit::Geocoders::MultiGeocoder.geocode(remote_ip)
   end
 
   def new
